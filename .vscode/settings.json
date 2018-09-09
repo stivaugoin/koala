@@ -1,0 +1,7 @@
+{
+  "editor.formatOnSave": true,
+  "flow.useNPMPackagedFlow": true,
+  "prettier.eslintIntegration": true,
+  "eslint.alwaysShowStatus": true,
+  "eslint.autoFixOnSave": true
+}
