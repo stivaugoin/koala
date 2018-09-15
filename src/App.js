@@ -2,7 +2,7 @@
 import React, { PureComponent } from "react";
 
 import Header from "./components/Header";
-import Home from "./views/Home";
+import Home from "./components/Home";
 
 type Props = {};
 
