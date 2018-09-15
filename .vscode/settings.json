@@ -3,5 +3,6 @@
   "flow.useNPMPackagedFlow": true,
   "prettier.eslintIntegration": true,
   "eslint.alwaysShowStatus": true,
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "eslint.packageManager": "yarn"
 }
