@@ -3,8 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "apollo-cache-inmemory": "^1.2.10",
+    "apollo-cache-persist": "^0.1.1",
+    "apollo-client": "^2.4.2",
+    "apollo-link": "^1.2.3",
+    "apollo-link-state": "^0.4.2",
     "bootstrap": "4.1.1",
+    "gedcom-js": "^0.2.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.9.2",
     "react": "^16.3.2",
+    "react-apollo": "^2.1.11",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.5",
     "reactstrap": "^6.4.0"
