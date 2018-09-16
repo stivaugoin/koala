@@ -14,7 +14,7 @@ import {
 } from "reactstrap";
 
 import { getFilenameQuery } from "../../graphql";
-import closeFile from "../../utils/closeFile";
+import resetFile from "../../utils/resetFile";
 
 type Props = {};
 
@@ -28,9 +28,9 @@ class Header extends PureComponent<Props, State> {
   };
 
   handleResetFile = async () => {
-    closeFile()
+    resetFile()
       .then(() => {
-        console.log("Done!");
+        console.log("Reset file done!");
       })
       .catch(error => {
         console.error(error);
@@ -67,7 +67,7 @@ class Header extends PureComponent<Props, State> {
                             </DropdownToggle>
                             <DropdownMenu right>
                               <DropdownItem onClick={this.handleResetFile}>
-                                Change file
+                                Close
                               </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>

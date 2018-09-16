@@ -1,7 +1,7 @@
 import { client } from "../apollo";
 import { updateFilename, updateOverview } from "../graphql";
 
-const closeFile = () =>
+const resetFile = () =>
   new Promise((resolve, reject) => {
     try {
       client.mutate({
@@ -25,4 +25,4 @@ const closeFile = () =>
     }
   });
 
-export default closeFile;
+export default resetFile;
