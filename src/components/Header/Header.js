@@ -1,6 +1,5 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
-import { Query } from "react-apollo";
 import {
   Collapse,
   Navbar,
@@ -12,11 +11,17 @@ import {
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
+import { Query } from "react-apollo";
+import { withRouter } from "react-router";
+
+import type { RouterHistory } from "react-router";
 
 import { getFilenameQuery } from "../../graphql";
 import resetFile from "../../utils/resetFile";
 
-type Props = {};
+type Props = {
+  history: RouterHistory
+};
 
 type State = {
   isOpen: boolean
@@ -28,9 +33,11 @@ class Header extends PureComponent<Props, State> {
   };
 
   handleResetFile = async () => {
+    const { history } = this.props;
+
     resetFile()
       .then(() => {
-        console.log("Reset file done!");
+        history.push("/");
       })
       .catch(error => {
         console.error(error);
@@ -84,4 +91,4 @@ class Header extends PureComponent<Props, State> {
   }
 }
 
-export default Header;
+export default withRouter(Header);
