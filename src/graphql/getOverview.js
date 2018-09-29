@@ -5,7 +5,10 @@ export const getOverviewQuery = gql`
   query {
     overview @client {
       nbIndividuals
+      nbLastName
       nbPlaces
+      popularLastName
+      popularPlace
     }
   }
 `;

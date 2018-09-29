@@ -7,7 +7,7 @@ import { cache, client } from "../../apollo";
 
 import Header from "../Header";
 import Home from "../Home";
-import Overview from "../Overview";
+import Layout from "../Layout";
 
 class App extends PureComponent {
   state = {
@@ -39,13 +39,14 @@ class App extends PureComponent {
     return (
       <BrowserRouter>
         <ApolloProvider client={client}>
-          <div className="App">
-            <Header />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/overview" component={Overview} />
-            </Switch>
-          </div>
+          <Header />
+
+          <Switch>
+            <Route path="/overview" component={Layout} />
+            <Route path="/people" component={Layout} />
+            <Route path="/places" component={Layout} />
+            <Route path="/" component={Home} />
+          </Switch>
         </ApolloProvider>
       </BrowserRouter>
     );

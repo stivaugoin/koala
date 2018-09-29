@@ -6,6 +6,9 @@ export default {
   overview: {
     __typename: "overview",
     nbIndividuals: 0,
-    nbPlaces: 0
+    nbLastName: 0,
+    nbPlaces: 0,
+    popularLastName: "",
+    popularPlace: ""
   }
 };

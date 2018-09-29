@@ -1,94 +1,62 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from "reactstrap";
 import { Query } from "react-apollo";
-import { withRouter } from "react-router";
-
-import type { RouterHistory } from "react-router";
+import { Link } from "react-router-dom";
+import { X } from "react-feather";
 
 import { getFilenameQuery } from "../../graphql";
 import resetFile from "../../utils/resetFile";
 
-type Props = {
-  history: RouterHistory
-};
+type Props = {};
 
-type State = {
-  isOpen: boolean
-};
-
-class Header extends PureComponent<Props, State> {
-  state = {
-    isOpen: false
-  };
-
+class Header extends PureComponent<Props> {
   handleResetFile = async () => {
-    const { history } = this.props;
-
-    resetFile()
-      .then(() => {
-        history.push("/");
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  handleToggle = () => {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
+    resetFile().catch(error => {
+      console.error(error);
+    });
   };
 
   render() {
-    const { isOpen } = this.state;
-
     return (
-      <header className="Header">
+      <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+        <Link className="navbar-brand col-sm-3 col-md-2 mr-0" to="/">
+          Koala
+        </Link>
+
         <Query query={getFilenameQuery}>
-          {({ data }) => {
-            const { app } = data;
-            return (
-              <Navbar color="light" light expand="sm">
-                <NavbarBrand href="/">Koala</NavbarBrand>
-                {app &&
-                  app.filename && (
-                    <Fragment>
-                      <NavbarToggler onClick={this.handleToggle} />
-                      <Collapse isOpen={isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
-                          Current file: {app.filename}
-                        </Nav>
-                        <Nav className="ml-auto" navbar>
-                          <UncontrolledDropdown nav inNavbar>
-                            <DropdownToggle nav caret>
-                              Settings
-                            </DropdownToggle>
-                            <DropdownMenu right>
-                              <DropdownItem onClick={this.handleResetFile}>
-                                Close
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </Nav>
-                      </Collapse>
-                    </Fragment>
-                  )}
-              </Navbar>
-            );
+          {({ loading, error, data }) => {
+            if (loading) return "loading...";
+            if (error) return `Error: ${error.message}`;
+
+            if (data && data.app && data.app.filename) {
+              return (
+                <Fragment>
+                  <span className="navbar-text text-light">
+                    {data.app.filename.replace(".ged", "")}
+                  </span>
+
+                  <ul className="navbar-nav px-3">
+                    <li className="nav-item text-nowrap">
+                      <button
+                        className="btn btn-outline-light btn-sm my-2 my-sm-0"
+                        onClick={this.handleResetFile}
+                        type="button"
+                      >
+                        <X className="feather inline" />
+                        Close
+                      </button>
+                    </li>
+                  </ul>
+                </Fragment>
+              );
+            }
+
+            return "";
           }}
         </Query>
-      </header>
+      </nav>
     );
   }
 }
 
-export default withRouter(Header);
+export default Header;

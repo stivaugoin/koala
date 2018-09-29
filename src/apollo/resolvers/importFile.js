@@ -10,9 +10,42 @@ export default async (_, { file }, { cache }) =>
         const { result } = fileContent.currentTarget;
         const parsed = gedcom.parse(result);
 
+        console.log(parsed);
+
         const filename = file.name;
         const nbIndividuals = Object.keys(parsed.individuals).length;
         const nbPlaces = Object.keys(parsed.places).length;
+
+        const lastName = new Map();
+        parsed.individuals.forEach(individual => {
+          const { names } = individual;
+
+          if (names) {
+            names.forEach(({ lname }) => {
+              const countLastName = lastName.get(lname) || 0;
+
+              lastName.set(lname, countLastName + 1);
+            });
+          }
+        });
+
+        const lastNameObj = [];
+        lastName.forEach((count, lname) => {
+          lastNameObj.push({ lname, count });
+        });
+
+        const nbLastName = lastName.size;
+        const popularLastName = lastNameObj.sort((a, b) => {
+          if (a.count > b.count) return -1;
+          if (a.count < b.count) return 1;
+          return 0;
+        })[0].lname;
+
+        const popularPlace = parsed.places.sort((a, b) => {
+          if (a.count > b.count) return -1;
+          if (a.count < b.count) return 1;
+          return 0;
+        })[0].name;
 
         const query = gql`
           {
@@ -21,7 +54,10 @@ export default async (_, { file }, { cache }) =>
             }
             overview @client {
               nbIndividuals
+              nbLastName
               nbPlaces
+              popularLastName
+              popularPlace
             }
           }
         `;
@@ -36,7 +72,10 @@ export default async (_, { file }, { cache }) =>
           overview: {
             ...previousState.overview,
             nbIndividuals,
-            nbPlaces
+            nbLastName,
+            nbPlaces,
+            popularLastName,
+            popularPlace
           }
         };
 

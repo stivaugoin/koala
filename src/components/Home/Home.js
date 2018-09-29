@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent } from "react";
-import { Container, Input, Jumbotron } from "reactstrap";
 import { Mutation, Query } from "react-apollo";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
@@ -8,8 +7,6 @@ import { withRouter } from "react-router";
 import type { RouterHistory } from "react-router";
 
 import { getFilenameQuery, mutationImportFile } from "../../graphql";
-
-import "./styles.css";
 
 type Props = {
   history: RouterHistory
@@ -30,8 +27,8 @@ class Home extends PureComponent<Props> {
           }
 
           return (
-            <Container className="Home">
-              <Jumbotron className="pb-5 pt-5">
+            <main role="main" className="container pt-5">
+              <div className="jumbotron py-5">
                 <h1 className="display-6 mb-4">
                   Visualize your genealogy tree
                 </h1>
@@ -48,7 +45,7 @@ class Home extends PureComponent<Props> {
                         return `error: ${importationState.error.message}`;
 
                       return (
-                        <Input
+                        <input
                           type="file"
                           accept=".ged"
                           onChange={event => {
@@ -61,8 +58,8 @@ class Home extends PureComponent<Props> {
                     }}
                   </Mutation>
                 </div>
-              </Jumbotron>
-            </Container>
+              </div>
+            </main>
           );
         }}
       </Query>
