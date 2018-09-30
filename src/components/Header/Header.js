@@ -1,59 +1,108 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
-import { Query } from "react-apollo";
 import { Link } from "react-router-dom";
 import { X } from "react-feather";
 
-import { getFilenameQuery } from "../../graphql";
-import resetFile from "../../utils/resetFile";
+import type { RouterHistory } from "react-router";
 
-type Props = {};
+import { getItem, removeItem } from "../../utils/asyncLocalStorage";
 
-class Header extends PureComponent<Props> {
+type Props = {
+  history: RouterHistory
+};
+
+type State = {
+  filename: string,
+  isLoading: boolean
+};
+
+class Header extends PureComponent<Props, State> {
+  state = {
+    filename: "",
+    isLoading: true
+  };
+
+  static defaultProps = {
+    filename: ""
+  };
+
+  componentDidMount() {
+    this.fetchFilename();
+  }
+
+  componentDidUpdate() {
+    this.fetchFilename();
+  }
+
   handleResetFile = async () => {
-    resetFile().catch(error => {
+    const { history } = this.props;
+
+    this.setState({ isLoading: true });
+
+    try {
+      await Promise.all([
+        removeItem("filename"),
+        removeItem("individuals"),
+        removeItem("places")
+      ]);
+
+      this.setState({ filename: "" });
+      history.push("/");
+    } catch (error) {
       console.error(error);
-    });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  fetchFilename = async () => {
+    try {
+      const filename = await getItem("filename");
+
+      if (filename) {
+        this.setState({ filename });
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.setState({ isLoading: false });
+    }
   };
 
   render() {
+    const { filename, isLoading } = this.state;
+
     return (
       <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
         <Link className="navbar-brand col-sm-3 col-md-2 mr-0" to="/">
           Koala
         </Link>
 
-        <Query query={getFilenameQuery}>
-          {({ loading, error, data }) => {
-            if (loading) return "loading...";
-            if (error) return `Error: ${error.message}`;
+        {filename && (
+          <Fragment>
+            <span className="navbar-text text-light">{filename}</span>
 
-            if (data && data.app && data.app.filename) {
-              return (
-                <Fragment>
-                  <span className="navbar-text text-light">
-                    {data.app.filename.replace(".ged", "")}
-                  </span>
-
-                  <ul className="navbar-nav px-3">
-                    <li className="nav-item text-nowrap">
-                      <button
-                        className="btn btn-outline-light btn-sm my-2 my-sm-0"
-                        onClick={this.handleResetFile}
-                        type="button"
-                      >
-                        <X className="feather inline" />
-                        Close
-                      </button>
-                    </li>
-                  </ul>
-                </Fragment>
-              );
-            }
-
-            return "";
-          }}
-        </Query>
+            <ul className="navbar-nav px-3">
+              <li className="nav-item text-nowrap">
+                <button
+                  className="btn btn-outline-light btn-sm my-2 my-sm-0"
+                  disabled={isLoading}
+                  onClick={this.handleResetFile}
+                  type="button"
+                >
+                  {isLoading ? (
+                    "Loading..."
+                  ) : (
+                    <Fragment>
+                      <X className="feather inline" />
+                      Close
+                    </Fragment>
+                  )}
+                </button>
+              </li>
+            </ul>
+          </Fragment>
+        )}
       </nav>
     );
   }

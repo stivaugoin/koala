@@ -1,68 +1,77 @@
 // @flow
-import React, { PureComponent } from "react";
-import { Mutation, Query } from "react-apollo";
+import React, { Component } from "react";
+import gedcom from "gedcom-js";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
 
 import type { RouterHistory } from "react-router";
 
-import { getFilenameQuery, mutationImportFile } from "../../graphql";
+import { getItem, setItem } from "../../utils/asyncLocalStorage";
 
 type Props = {
   history: RouterHistory
 };
 
-class Home extends PureComponent<Props> {
-  render() {
+type State = {
+  redirect: boolean
+};
+
+class Home extends Component<Props, State> {
+  state = { redirect: false };
+
+  async componentDidMount() {
+    const filename = await getItem("filename");
+
+    if (filename) {
+      this.setState({ redirect: true });
+    }
+  }
+
+  handleChange = event => {
     const { history } = this.props;
+    const file = event.target.files[0];
+
+    if (file) {
+      // eslint-disable-next-line no-undef
+      const fileReader = new FileReader();
+
+      fileReader.onload = async fileContent => {
+        const { result } = fileContent.currentTarget;
+        const parsed = gedcom.parse(result);
+
+        try {
+          await Promise.all([
+            setItem("filename", file.name),
+            setItem("individuals", JSON.stringify(parsed.individuals)),
+            setItem("places", JSON.stringify(parsed.places))
+          ]);
+
+          history.push("/overview");
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fileReader.readAsText(file);
+    }
+  };
+
+  render() {
+    const { redirect } = this.state;
+
+    if (redirect) {
+      return <Redirect to="/overview" />;
+    }
 
     return (
-      <Query query={getFilenameQuery}>
-        {({ data, error, loading }) => {
-          if (loading) return "loading...";
-          if (error) return `error: ${error.message}`;
-
-          if (data && data.app && data.app.filename) {
-            return <Redirect to="/overview" />;
-          }
-
-          return (
-            <main role="main" className="container pt-5">
-              <div className="jumbotron py-5">
-                <h1 className="display-6 mb-4">
-                  Visualize your genealogy tree
-                </h1>
-                <div>
-                  <Mutation
-                    mutation={mutationImportFile}
-                    onCompleted={() => {
-                      history.push("/overview");
-                    }}
-                  >
-                    {(importFile, importationState) => {
-                      if (importationState.loading) return "loading...";
-                      if (importationState.error)
-                        return `error: ${importationState.error.message}`;
-
-                      return (
-                        <input
-                          type="file"
-                          accept=".ged"
-                          onChange={event => {
-                            importFile({
-                              variables: { file: event.target.files[0] }
-                            });
-                          }}
-                        />
-                      );
-                    }}
-                  </Mutation>
-                </div>
-              </div>
-            </main>
-          );
-        }}
-      </Query>
+      <main role="main" className="container pt-5">
+        <div className="jumbotron py-5">
+          <h1 className="display-6 mb-4">Visualize your genealogy tree</h1>
+          <div>
+            <input type="file" accept=".ged" onChange={this.handleChange} />
+          </div>
+        </div>
+      </main>
     );
   }
 }
