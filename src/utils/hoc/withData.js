@@ -32,7 +32,6 @@ function withData(WrappedComponent: React.Node) {
           await getItem("places")
         ]);
 
-        console.log(filename, individuals, places);
         if (!filename || !individuals || !places) {
           this.setState({ redirect: true });
           return;
@@ -40,9 +39,9 @@ function withData(WrappedComponent: React.Node) {
 
         this.setState({
           filename,
-          individuals,
+          individuals: JSON.parse(individuals),
           isLoading: false,
-          places
+          places: JSON.parse(places)
         });
       } catch (error) {
         console.error(error);

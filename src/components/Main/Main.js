@@ -1,16 +1,28 @@
 // @flow
 import * as React from "react";
+import classnames from "classnames";
 
 type Props = {
-  children: React.Node
+  children: React.Node,
+  className?: string
 };
 
 class Main extends React.PureComponent<Props> {
+  static defaultProps = {
+    className: ""
+  };
+
   render() {
-    const { children } = this.props;
+    const { children, className } = this.props;
 
     return (
-      <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+      <main
+        className={classnames(
+          "col-md-9 ml-sm-auto col-lg-10 pt-3 px-4",
+          className
+        )}
+        role="main"
+      >
         {children}
       </main>
     );
