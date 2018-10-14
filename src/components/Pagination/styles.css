@@ -1,0 +1,9 @@
+.Pagination {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Pagination .btn {
+  display: flex;
+  align-items: center;
+}

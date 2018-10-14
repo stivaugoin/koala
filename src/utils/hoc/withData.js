@@ -1,47 +1,44 @@
 // @flow
 import * as React from "react";
-import { Redirect } from "react-router-dom";
 
 import { getItem } from "../asyncLocalStorage";
 
 type Props = {};
 
 type State = {
-  filename: string,
-  individuals: Array<{}>,
-  isLoading: boolean,
-  places: Array<{}>,
-  redirect: boolean
+  data: Array<{}>,
+  isLoading: boolean
 };
 
-function withData(WrappedComponent: React.Node) {
-  return class extends React.PureComponent<Props, State> {
+type Key = "individuals" | "places";
+
+const withData = ({ key }: { key: Key }) => (WrappedComponent: any) =>
+  class extends React.PureComponent<Props, State> {
+    constructor(props: Props) {
+      super(props);
+
+      if (!key) {
+        throw new Error("Please provide a key.");
+      }
+
+      // $FlowFixMe
+      if (key === "filename") {
+        throw new Error("Use the HoC withFilename instead of this one.");
+      }
+    }
+
     state = {
-      filename: "",
-      individuals: [],
-      isLoading: true,
-      places: [],
-      redirect: false
+      data: [],
+      isLoading: true
     };
 
     async componentDidMount() {
       try {
-        const [filename, individuals, places] = await Promise.all([
-          await getItem("filename"),
-          await getItem("individuals"),
-          await getItem("places")
-        ]);
-
-        if (!filename || !individuals || !places) {
-          this.setState({ redirect: true });
-          return;
-        }
+        const data = await getItem(key);
 
         this.setState({
-          filename,
-          individuals: JSON.parse(individuals),
-          isLoading: false,
-          places: JSON.parse(places)
+          data: JSON.parse(data) || [],
+          isLoading: false
         });
       } catch (error) {
         console.error(error);
@@ -49,26 +46,13 @@ function withData(WrappedComponent: React.Node) {
     }
 
     render() {
-      const { filename, individuals, isLoading, places, redirect } = this.state;
-
-      if (redirect) {
-        return <Redirect to="/" />;
-      }
-
-      if (isLoading) {
-        return "Loading...";
-      }
+      const { data, isLoading } = this.state;
 
       return (
         // $FlowFixMe
-        <WrappedComponent
-          filename={filename}
-          individuals={individuals}
-          places={places}
-        />
+        <WrappedComponent {...this.props} data={data} isLoading={isLoading} />
       );
     }
   };
-}
 
 export default withData;

@@ -1,34 +1,38 @@
 // @flow
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Redirect, Route } from "react-router-dom";
+
+import withFilename, { type WithFilename } from "../../utils/hoc/withFilename";
 
 import Overview from "../Overview";
 import People from "../People";
 import Places from "../Places";
 import Sidebar from "../Sidebar";
 
-import withData from "../../utils/hoc/withData";
-
 type Props = {
-  individuals: Array<{}>
+  ...WithFilename
 };
 
 class Layout extends Component<Props> {
   render() {
-    const { individuals } = this.props;
+    const { filename, isLoading } = this.props;
+
+    if (isLoading) {
+      return <h1>Loading...</h1>;
+    }
+
+    if (!filename) {
+      return <Redirect to="/" />;
+    }
 
     return (
       <div className="container-fluid">
         <div className="row">
           <Sidebar />
           <Switch>
-            <Route component={Overview} exact path="/overview" />
-            <Route
-              exact
-              render={props => <People {...props} individuals={individuals} />}
-              path="/people"
-            />
-            <Route component={Places} exact path="/places" />
+            <Route exact component={Overview} path="/overview" />
+            <Route exact component={People} path="/people" />
+            <Route exact component={Places} path="/places" />
           </Switch>
         </div>
       </div>
@@ -37,4 +41,4 @@ class Layout extends Component<Props> {
 }
 
 // $FlowFixMe
-export default withData(Layout);
+export default withFilename(Layout);

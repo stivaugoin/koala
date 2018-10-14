@@ -2,10 +2,16 @@
 import React, { PureComponent } from "react";
 import { Calendar, MapPin, User } from "react-feather";
 import classnames from "classnames";
+import { compose } from "recompose";
 
 import Main from "../Main";
+import Pagination from "../Pagination";
 import TitlePage from "../TitlePage";
 import Tooltip from "../Tooltip";
+import withPagination, {
+  type WithPagination
+} from "../../utils/hoc/withPagination";
+import withData from "../../utils/hoc/withData";
 
 import "./styles.css";
 
@@ -17,8 +23,8 @@ type Event = {|
   }
 |};
 
-type Props = {
-  individuals: Array<{
+type Props = {|
+  data: Array<{
     id: string,
     births: Array<Event>,
     deaths: Array<Event>,
@@ -27,8 +33,9 @@ type Props = {
       fname: string,
       lname: string
     }>
-  }>
-};
+  }>,
+  ...WithPagination
+|};
 
 const getBirth = births => ({
   date: births && births[0] && births[0].date,
@@ -42,7 +49,7 @@ const getDeath = deaths => ({
 
 class People extends PureComponent<Props> {
   render() {
-    const { individuals } = this.props;
+    const { currentPage, data, itemsPerPage, ...pagination } = this.props;
 
     return (
       <Main className="People">
@@ -58,67 +65,77 @@ class People extends PureComponent<Props> {
               </tr>
             </thead>
             <tbody>
-              {individuals.map(person => {
-                const birth = getBirth(person.births);
-                const death = getDeath(person.deaths);
+              {data
+                .slice(
+                  currentPage * itemsPerPage,
+                  currentPage * itemsPerPage + itemsPerPage
+                )
+                .map(person => {
+                  const birth = getBirth(person.births);
+                  const death = getDeath(person.deaths);
 
-                return (
-                  <tr key={person.id}>
-                    <td className="d-flex align-items-center">
-                      <User
-                        className={classnames({
-                          "text-primary": person.gender === "M",
-                          "text-danger": person.gender === "F"
-                        })}
-                      />
-                      {person.names[0].lname.toUpperCase()},{" "}
-                      {person.names[0].fname}
-                    </td>
-                    <td>
-                      <Tooltip value={birth.date}>
-                        <Calendar
+                  return (
+                    <tr key={person.id}>
+                      <td className="d-flex align-items-center">
+                        <User
                           className={classnames({
-                            "text-success": birth.date,
-                            "text-danger": !birth.date
+                            "text-primary": person.gender === "M",
+                            "text-danger": person.gender === "F"
                           })}
                         />
-                      </Tooltip>
-                      <Tooltip value={birth.place}>
-                        <MapPin
-                          className={classnames({
-                            "text-success": birth.place,
-                            "text-danger": !birth.place
-                          })}
-                        />
-                      </Tooltip>
-                    </td>
-                    <td>
-                      <Tooltip value={death.date}>
-                        <Calendar
-                          className={classnames({
-                            "text-success": death.date,
-                            "text-danger": !death.date
-                          })}
-                        />
-                      </Tooltip>
-                      <Tooltip value={death.place}>
-                        <MapPin
-                          className={classnames({
-                            "text-success": death.place,
-                            "text-danger": !death.place
-                          })}
-                        />
-                      </Tooltip>
-                    </td>
-                  </tr>
-                );
-              })}
+                        {person.names[0].lname.toUpperCase()},{" "}
+                        {person.names[0].fname}
+                      </td>
+                      <td>
+                        <Tooltip value={birth.date}>
+                          <Calendar
+                            className={classnames({
+                              "text-success": birth.date,
+                              "text-danger": !birth.date
+                            })}
+                          />
+                        </Tooltip>
+                        <Tooltip value={birth.place}>
+                          <MapPin
+                            className={classnames({
+                              "text-success": birth.place,
+                              "text-danger": !birth.place
+                            })}
+                          />
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip value={death.date}>
+                          <Calendar
+                            className={classnames({
+                              "text-success": death.date,
+                              "text-danger": !death.date
+                            })}
+                          />
+                        </Tooltip>
+                        <Tooltip value={death.place}>
+                          <MapPin
+                            className={classnames({
+                              "text-success": death.place,
+                              "text-danger": !death.place
+                            })}
+                          />
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
         </div>
+
+        <Pagination {...pagination} />
       </Main>
     );
   }
 }
 
-export default People;
+export default compose(
+  withData({ key: "individuals" }),
+  withPagination
+)(People);
