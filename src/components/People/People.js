@@ -56,12 +56,16 @@ class People extends PureComponent<Props> {
         <TitlePage>People</TitlePage>
 
         <div className="list">
-          <table className="table table-striped">
+          <table className="table table-striped table-bordered">
             <thead>
               <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Birth</th>
-                <th scope="col">Death</th>
+                <th className="text-center" scope="col">
+                  Birth
+                </th>
+                <th className="text-center" scope="col">
+                  Death
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -76,7 +80,7 @@ class People extends PureComponent<Props> {
 
                   return (
                     <tr key={person.id}>
-                      <td className="d-flex align-items-center">
+                      <td>
                         <User
                           className={classnames({
                             "text-primary": person.gender === "M",
@@ -86,7 +90,7 @@ class People extends PureComponent<Props> {
                         {person.names[0].lname.toUpperCase()},{" "}
                         {person.names[0].fname}
                       </td>
-                      <td>
+                      <td className="text-center">
                         <Tooltip value={birth.date}>
                           <Calendar
                             className={classnames({
@@ -104,7 +108,7 @@ class People extends PureComponent<Props> {
                           />
                         </Tooltip>
                       </td>
-                      <td>
+                      <td className="text-center">
                         <Tooltip value={death.date}>
                           <Calendar
                             className={classnames({
