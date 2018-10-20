@@ -1,5 +1,6 @@
 // @flow
 import * as React from "react";
+import * as Sentry from "@sentry/browser";
 
 import { getItem } from "../asyncLocalStorage";
 
@@ -41,7 +42,7 @@ const withData = ({ key }: { key: Key }) => (WrappedComponent: any) =>
           isLoading: false
         });
       } catch (error) {
-        console.error(error);
+        Sentry.captureException(error);
       }
     }
 
