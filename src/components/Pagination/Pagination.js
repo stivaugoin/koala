@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "react-feather";
 
 import type { WithPagination } from "../../utils/hoc/withPagination";
 
-import "./styles.css";
+import { Button, StyledPagination } from "./styles";
 
 type Props = {
   ...WithPagination
@@ -15,8 +15,8 @@ class Pagination extends PureComponent<Props> {
     const { isFirstPage, isLastPage, onPageDown, onPageUp } = this.props;
 
     return (
-      <div className="Pagination">
-        <button
+      <StyledPagination className="Pagination">
+        <Button
           className="btn btn-outline-primary"
           disabled={isFirstPage}
           onClick={onPageDown}
@@ -24,8 +24,8 @@ class Pagination extends PureComponent<Props> {
         >
           <ChevronLeft />
           Previous
-        </button>
-        <button
+        </Button>
+        <Button
           className="btn btn-outline-primary"
           disabled={isLastPage}
           onClick={onPageUp}
@@ -33,8 +33,8 @@ class Pagination extends PureComponent<Props> {
         >
           Next
           <ChevronRight />
-        </button>
-      </div>
+        </Button>
+      </StyledPagination>
     );
   }
 }
