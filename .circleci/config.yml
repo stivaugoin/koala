@@ -5,7 +5,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  checkout_and_build:
+  build:
     <<: *defaults
     steps:
       - checkout
