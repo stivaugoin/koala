@@ -2,7 +2,7 @@ Koala is a web application that allows you to view the information about family 
 
 > Koala is not the official name of the app. It's only for the alpha phase.
 
-[![CircleCI](https://circleci.com/gh/stivaugoin/koala.svg?style=svg)](https://circleci.com/gh/stivaugoin/koala)
+[![CircleCI branch](https://img.shields.io/circleci/project/github/stivaugoin/koala/master.svg)](https://circleci.com/gh/stivaugoin/koala)
 
 ## Prerequisites
 
