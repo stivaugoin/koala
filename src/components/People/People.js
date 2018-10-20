@@ -13,7 +13,7 @@ import withPagination, {
 } from "../../utils/hoc/withPagination";
 import withData from "../../utils/hoc/withData";
 
-import "./styles.css";
+import { List, TD, TH } from "./styles";
 
 type Event = {|
   date: Date,
@@ -55,17 +55,17 @@ class People extends PureComponent<Props> {
       <Main className="People">
         <TitlePage>People</TitlePage>
 
-        <div className="list">
+        <List className="list">
           <table className="table table-striped table-bordered">
             <thead>
               <tr>
-                <th scope="col">Name</th>
-                <th className="text-center" scope="col">
+                <TH scope="col">Name</TH>
+                <TH className="text-center" scope="col">
                   Birth
-                </th>
-                <th className="text-center" scope="col">
+                </TH>
+                <TH className="text-center" scope="col">
                   Death
-                </th>
+                </TH>
               </tr>
             </thead>
             <tbody>
@@ -80,7 +80,7 @@ class People extends PureComponent<Props> {
 
                   return (
                     <tr key={person.id}>
-                      <td>
+                      <TD>
                         <User
                           className={classnames({
                             "text-primary": person.gender === "M",
@@ -89,8 +89,8 @@ class People extends PureComponent<Props> {
                         />
                         {person.names[0].lname.toUpperCase()},{" "}
                         {person.names[0].fname}
-                      </td>
-                      <td className="text-center">
+                      </TD>
+                      <TD className="text-center">
                         <Tooltip value={birth.date}>
                           <Calendar
                             className={classnames({
@@ -107,8 +107,8 @@ class People extends PureComponent<Props> {
                             })}
                           />
                         </Tooltip>
-                      </td>
-                      <td className="text-center">
+                      </TD>
+                      <TD className="text-center">
                         <Tooltip value={death.date}>
                           <Calendar
                             className={classnames({
@@ -125,13 +125,13 @@ class People extends PureComponent<Props> {
                             })}
                           />
                         </Tooltip>
-                      </td>
+                      </TD>
                     </tr>
                   );
                 })}
             </tbody>
           </table>
-        </div>
+        </List>
 
         <Pagination {...pagination} />
       </Main>
