@@ -5,7 +5,7 @@ defaults: &defaults
 
 version: 2
 jobs:
-  build:
+  checkout_and_build:
     <<: *defaults
     steps:
       - checkout
@@ -38,3 +38,15 @@ jobs:
       - run:
           name: Check for errors in code using Flow
           command: yarn flow check
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - checkout_and_build
+      - lint:
+          requires:
+            - checkout_and_build
+      - flow:
+          requires:
+            - checkout_and_build
