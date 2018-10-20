@@ -1,0 +1,5 @@
+/build
+/flow-typed
+/node_modules
+/public
+/src/registerServiceWorker.js

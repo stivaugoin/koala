@@ -1,0 +1,55 @@
+defaults: &defaults
+  working_directory: ~/koala
+  docker:
+    - image: circleci/node:10.2
+
+version: 2
+jobs:
+  checkout:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: .
+          paths: .
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/koala
+      - run:
+          name: Start Linter
+          command: yarn lint
+
+  flow:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/koala
+      - run:
+          name: Flow version
+          command: yarn flow version
+      - run:
+          name: Check for errors in code using Flow
+          command: yarn flow check
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - checkout
+      - lint:
+          requires:
+            - checkout
+      - flow:
+          requires:
+            - checkout
