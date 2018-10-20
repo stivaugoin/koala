@@ -20,9 +20,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "pretest": "yarn lint && yarn flow",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "prettier": "prettier es5 --write \"{src,__{tests,mocks}__}/**/*.js\""
+    "prettier": "prettier es5 --write \"{src,__{tests,mocks}__}/**/*.js\"",
+    "lint": "eslint .",
+    "flow": "flow"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

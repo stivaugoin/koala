@@ -12,6 +12,7 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
   },
   "globals": {
-    "localStorage": false
+    "localStorage": false,
+    "window": false
   }
 }
