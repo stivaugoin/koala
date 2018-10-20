@@ -1,7 +1,16 @@
 {
-  "name": "koala",
-  "version": "0.1.0",
-  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "pretest": "yarn lint && yarn flow",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "prettier": "prettier es5 --write \"{src,__{tests,mocks}__}/**/*.js\"",
+    "lint": "eslint .",
+    "flow": "flow",
+    "now-start": "serve --single ./build",
+    "deploy": "now && now alias && now rm koala --safe --yes"
+  },
   "dependencies": {
     "@sentry/browser": "^4.1.1",
     "bootstrap": "^4.1.3",
@@ -18,18 +27,6 @@
     "serve": "^10.0.2",
     "styled-components": "^4.0.2",
     "uuid": "^3.3.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "pretest": "yarn lint && yarn flow",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "prettier": "prettier es5 --write \"{src,__{tests,mocks}__}/**/*.js\"",
-    "lint": "eslint .",
-    "flow": "flow",
-    "now-start": "serve --single ./build",
-    "deploy": "now && now alias && now rm koala --safe --yes"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
