@@ -25,7 +25,13 @@ export default class ErrorBoundary extends React.PureComponent<Props, State> {
     const { children } = this.props;
 
     if (hasError) {
-      return <h1>Something went wrong.</h1>;
+      return (
+        <main role="main" className="container pt-5">
+          <div className="jumbotron py-5">
+            <h1 className="display-6 mb-4">Something went wrong.</h1>
+          </div>
+        </main>
+      );
     }
     return children;
   }
