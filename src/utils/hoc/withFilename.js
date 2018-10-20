@@ -1,5 +1,6 @@
 // @flow
 import * as React from "react";
+import * as Sentry from "@sentry/browser";
 
 import { getItem } from "../asyncLocalStorage";
 
@@ -28,7 +29,7 @@ function withFilename(WrappedComponent: React.Node) {
           isLoading: false
         });
       } catch (error) {
-        console.error(error);
+        Sentry.captureException(error);
       }
     }
 

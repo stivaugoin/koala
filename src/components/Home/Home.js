@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from "react";
+import * as Sentry from "@sentry/browser";
 import gedcom from "gedcom-js";
 import { Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
@@ -48,7 +49,7 @@ class Home extends Component<Props, State> {
 
           history.push("/overview");
         } catch (error) {
-          console.error(error);
+          Sentry.captureException(error);
         }
       };
 

@@ -1,5 +1,6 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
+import * as Sentry from "@sentry/browser";
 import { Link } from "react-router-dom";
 import { X } from "react-feather";
 
@@ -49,7 +50,7 @@ class Header extends PureComponent<Props, State> {
       this.setState({ filename: "" });
       history.push("/");
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     } finally {
       this.setState({ isLoading: false });
     }
@@ -63,7 +64,7 @@ class Header extends PureComponent<Props, State> {
         this.setState({ filename });
       }
     } catch (error) {
-      console.error(error);
+      Sentry.captureException(error);
     } finally {
       this.setState({ isLoading: false });
     }
