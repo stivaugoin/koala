@@ -20,6 +20,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
+  lint:
+    steps:
       - run: yarn lint
+
+  flow:
+    steps:
       - run: yarn flow
