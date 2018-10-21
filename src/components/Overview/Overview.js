@@ -1,9 +1,9 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
-import classnames from "classnames";
-import { Link } from "react-router-dom";
 
 import { getItem } from "../../utils/asyncLocalStorage";
+
+import Indicator from "../Indicator";
 import Main from "../Main";
 import TitlePage from "../TitlePage";
 
@@ -76,45 +76,6 @@ class Overview extends PureComponent<Props, State> {
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  renderCard({
-    path,
-    title,
-    value
-  }: {
-    path?: string,
-    title: string,
-    value: number | string
-  }) {
-    return (
-      <div className="card text-center">
-        <div className="card-body d-flex flex-column justify-content-center">
-          <h5
-            className={classnames("card-title", {
-              h1: typeof value === "number",
-              h3: typeof value === "string"
-            })}
-            style={{
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis"
-            }}
-          >
-            {value}
-          </h5>
-          <h6 className="card-subtitle mb-2 text-muted">{title}</h6>
-        </div>
-        {path && (
-          <div className="card-footer">
-            <Link to={path} className="card-link">
-              View list
-            </Link>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   render() {
     const {
       isLoading,
@@ -135,40 +96,37 @@ class Overview extends PureComponent<Props, State> {
           <Fragment>
             <div className="row">
               <div className="col-sm-4">
-                {this.renderCard({
-                  path: "/people",
-                  title: "Unique People",
-                  value: nbPeople
-                })}
+                <Indicator
+                  path="/people"
+                  title="Unique People"
+                  value={nbPeople}
+                />
               </div>
               <div className="col-sm-4">
-                {this.renderCard({
-                  path: "/places",
-                  title: "Unique Places",
-                  value: nbPlaces
-                })}
+                <Indicator
+                  path="/places"
+                  title="Unique Places"
+                  value={nbPlaces}
+                />
               </div>
               <div className="col-sm-4">
-                {this.renderCard({
-                  path: "/unique-lastname",
-                  title: "Unique Last Name",
-                  value: nbLastName
-                })}
+                <Indicator
+                  path="/last-name"
+                  title="Unique Last Name"
+                  value={nbLastName}
+                />
               </div>
             </div>
 
             <div className="row">
               <div className="col-sm-4">
-                {this.renderCard({
-                  title: "Most Popular Last Name",
-                  value: popularLastName
-                })}
+                <Indicator
+                  title="Most Popular Last Name"
+                  value={popularLastName}
+                />
               </div>
               <div className="col-sm-8">
-                {this.renderCard({
-                  title: "Most Popular Place",
-                  value: popularPlace
-                })}
+                <Indicator title="Most Popular Place" value={popularPlace} />
               </div>
             </div>
           </Fragment>
