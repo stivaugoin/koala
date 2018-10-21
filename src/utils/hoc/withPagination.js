@@ -36,7 +36,7 @@ export default (WrappedComponent: ComponentType<any>) =>
         return {
           currentPage: newPage,
           isFirstPage: newPage === 0,
-          isLastPage: newPage >= Math.round(data.length / state.itemsPerPage)
+          isLastPage: newPage >= Math.floor(data.length / state.itemsPerPage)
         };
       });
     };
@@ -50,7 +50,7 @@ export default (WrappedComponent: ComponentType<any>) =>
         return {
           currentPage: newPage,
           isFirstPage: newPage === 0,
-          isLastPage: newPage >= Math.round(data.length / state.itemsPerPage)
+          isLastPage: newPage >= Math.floor(data.length / state.itemsPerPage)
         };
       });
     };
