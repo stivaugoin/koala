@@ -7,38 +7,45 @@ import { getItem } from "../asyncLocalStorage";
 type Props = {};
 
 type State = {
-  data: Array<{}>,
+  data: {
+    individuals?: Array<{}>,
+    places?: Array<{}>
+  },
   isLoading: boolean
 };
 
 type Key = "individuals" | "places";
 
-const withData = ({ key }: { key: Key }) => (WrappedComponent: any) =>
+const withData = ({ items }: { items: Array<Key> }) => (
+  WrappedComponent: any
+) =>
   class extends React.PureComponent<Props, State> {
     constructor(props: Props) {
       super(props);
 
-      if (!key) {
-        throw new Error("Please provide a key.");
-      }
-
       // $FlowFixMe
-      if (key === "filename") {
+      if (items.includes("filename")) {
         throw new Error("Use the HoC withFilename instead of this one.");
       }
     }
 
     state = {
-      data: [],
+      data: {},
       isLoading: true
     };
 
     async componentDidMount() {
+      const data = {};
+
       try {
-        const data = await getItem(key);
+        await Promise.all(
+          items.map(async item => {
+            data[item] = JSON.parse(await getItem(item));
+          })
+        );
 
         this.setState({
-          data: JSON.parse(data) || [],
+          data,
           isLoading: false
         });
       } catch (error) {
