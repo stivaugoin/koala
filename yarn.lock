@@ -3716,9 +3716,9 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-gedcom-js@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/gedcom-js/-/gedcom-js-0.2.0.tgz#3c33c766403bf45905c21e23174fb5e74a7618bb"
+gedcom-js@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/gedcom-js/-/gedcom-js-0.2.1.tgz#27111d93d0b776a622154b4d205ac4963960223a"
   dependencies:
     parse-gedcom "^1.0.3"
     uuid "^3.3.2"
