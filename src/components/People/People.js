@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from "react";
+import React, { Fragment, PureComponent } from "react";
 import { Calendar, MapPin, User } from "react-feather";
 import classnames from "classnames";
 import { compose } from "recompose";
@@ -24,16 +24,19 @@ type Event = {|
 |};
 
 type Props = {|
-  data: Array<{
-    id: string,
-    births: Array<Event>,
-    deaths: Array<Event>,
-    gender: "M" | "F",
-    names: Array<{
-      fname: string,
-      lname: string
+  data: {
+    individuals: Array<{
+      id: string,
+      births: Array<Event>,
+      deaths: Array<Event>,
+      gender: "M" | "F",
+      names: Array<{
+        fname: string,
+        lname: string
+      }>
     }>
-  }>,
+  },
+  isLoading: boolean,
   ...WithPagination
 |};
 
@@ -49,97 +52,110 @@ const getDeath = deaths => ({
 
 class People extends PureComponent<Props> {
   render() {
-    const { currentPage, data, itemsPerPage, ...pagination } = this.props;
+    const {
+      currentPage,
+      data,
+      isLoading,
+      itemsPerPage,
+      ...pagination
+    } = this.props;
+    const { individuals } = data;
 
     return (
       <Main className="People">
         <TitlePage>People</TitlePage>
 
-        <List className="list">
-          <table className="table table-striped table-bordered">
-            <thead>
-              <tr>
-                <TH scope="col">Name</TH>
-                <TH className="text-center" scope="col">
-                  Birth
-                </TH>
-                <TH className="text-center" scope="col">
-                  Death
-                </TH>
-              </tr>
-            </thead>
-            <tbody>
-              {data
-                .slice(
-                  currentPage * itemsPerPage,
-                  currentPage * itemsPerPage + itemsPerPage
-                )
-                .map(person => {
-                  const birth = getBirth(person.births);
-                  const death = getDeath(person.deaths);
+        {isLoading ? (
+          <h3>Loading...</h3>
+        ) : (
+          <Fragment>
+            <List className="list">
+              <table className="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <TH scope="col">Name</TH>
+                    <TH className="text-center" scope="col">
+                      Birth
+                    </TH>
+                    <TH className="text-center" scope="col">
+                      Death
+                    </TH>
+                  </tr>
+                </thead>
+                <tbody>
+                  {individuals
+                    .slice(
+                      currentPage * itemsPerPage,
+                      currentPage * itemsPerPage + itemsPerPage
+                    )
+                    .map(person => {
+                      const birth = getBirth(person.births);
+                      const death = getDeath(person.deaths);
 
-                  return (
-                    <tr key={person.id}>
-                      <TD>
-                        <User
-                          className={classnames({
-                            "text-primary": person.gender === "M",
-                            "text-danger": person.gender === "F"
-                          })}
-                        />
-                        {person.names[0].lname.toUpperCase()},{" "}
-                        {person.names[0].fname}
-                      </TD>
-                      <TD className="text-center">
-                        <Tooltip value={birth.date}>
-                          <Calendar
-                            className={classnames({
-                              "text-success": birth.date,
-                              "text-danger": !birth.date
-                            })}
-                          />
-                        </Tooltip>
-                        <Tooltip value={birth.place}>
-                          <MapPin
-                            className={classnames({
-                              "text-success": birth.place,
-                              "text-danger": !birth.place
-                            })}
-                          />
-                        </Tooltip>
-                      </TD>
-                      <TD className="text-center">
-                        <Tooltip value={death.date}>
-                          <Calendar
-                            className={classnames({
-                              "text-success": death.date,
-                              "text-danger": !death.date
-                            })}
-                          />
-                        </Tooltip>
-                        <Tooltip value={death.place}>
-                          <MapPin
-                            className={classnames({
-                              "text-success": death.place,
-                              "text-danger": !death.place
-                            })}
-                          />
-                        </Tooltip>
-                      </TD>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
-        </List>
+                      return (
+                        <tr key={person.id}>
+                          <TD>
+                            <User
+                              className={classnames({
+                                "text-primary": person.gender === "M",
+                                "text-danger": person.gender === "F"
+                              })}
+                            />
+                            {person.names[0].lname.toUpperCase()},{" "}
+                            {person.names[0].fname}
+                          </TD>
+                          <TD className="text-center">
+                            <Tooltip value={birth.date}>
+                              <Calendar
+                                className={classnames({
+                                  "text-success": birth.date,
+                                  "text-danger": !birth.date
+                                })}
+                              />
+                            </Tooltip>
+                            <Tooltip value={birth.place}>
+                              <MapPin
+                                className={classnames({
+                                  "text-success": birth.place,
+                                  "text-danger": !birth.place
+                                })}
+                              />
+                            </Tooltip>
+                          </TD>
+                          <TD className="text-center">
+                            <Tooltip value={death.date}>
+                              <Calendar
+                                className={classnames({
+                                  "text-success": death.date,
+                                  "text-danger": !death.date
+                                })}
+                              />
+                            </Tooltip>
+                            <Tooltip value={death.place}>
+                              <MapPin
+                                className={classnames({
+                                  "text-success": death.place,
+                                  "text-danger": !death.place
+                                })}
+                              />
+                            </Tooltip>
+                          </TD>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </List>
 
-        <Pagination {...pagination} />
+            <Pagination {...pagination} />
+          </Fragment>
+        )}
       </Main>
     );
   }
 }
 
 export default compose(
-  withData({ key: "individuals" }),
+  withData({ items: ["individuals"] }),
   withPagination
 )(People);

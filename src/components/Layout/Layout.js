@@ -6,6 +6,7 @@ import withFilename, { type WithFilename } from "../../utils/hoc/withFilename";
 
 import Overview from "../Overview";
 import People from "../People";
+import Place from "../Place";
 import Places from "../Places";
 import Sidebar from "../Sidebar";
 
@@ -32,6 +33,7 @@ class Layout extends Component<Props> {
           <Switch>
             <Route exact component={Overview} path="/overview" />
             <Route exact component={People} path="/people" />
+            <Route exact component={Place} path="/places/:id" />
             <Route exact component={Places} path="/places" />
           </Switch>
         </div>
