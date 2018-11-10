@@ -11,7 +11,6 @@ type Props = {};
 
 type State = {
   isLoading: boolean,
-  nbLastName: number,
   nbPeople: number,
   nbPlaces: number,
   popularLastName: string,
@@ -21,7 +20,6 @@ type State = {
 class Overview extends PureComponent<Props, State> {
   state = {
     isLoading: true,
-    nbLastName: 0,
     nbPeople: 0,
     nbPlaces: 0,
     popularLastName: "",
@@ -53,7 +51,6 @@ class Overview extends PureComponent<Props, State> {
       lastNameObj.push({ lname, count });
     });
 
-    const nbLastName = lastName.size;
     const popularLastName = lastNameObj.sort((a, b) => {
       if (a.count > b.count) return -1;
       if (a.count < b.count) return 1;
@@ -68,7 +65,6 @@ class Overview extends PureComponent<Props, State> {
 
     this.setState({
       isLoading: false,
-      nbLastName,
       nbPeople,
       nbPlaces,
       popularLastName,
@@ -79,7 +75,6 @@ class Overview extends PureComponent<Props, State> {
   render() {
     const {
       isLoading,
-      nbLastName,
       nbPeople,
       nbPlaces,
       popularLastName,
@@ -95,25 +90,18 @@ class Overview extends PureComponent<Props, State> {
         ) : (
           <Fragment>
             <div className="row">
-              <div className="col-sm-4">
+              <div className="col-sm-6">
                 <Indicator
                   path="/people"
                   title="Unique People"
                   value={nbPeople}
                 />
               </div>
-              <div className="col-sm-4">
+              <div className="col-sm-6">
                 <Indicator
                   path="/places"
                   title="Unique Places"
                   value={nbPlaces}
-                />
-              </div>
-              <div className="col-sm-4">
-                <Indicator
-                  path="/last-name"
-                  title="Unique Last Name"
-                  value={nbLastName}
                 />
               </div>
             </div>
