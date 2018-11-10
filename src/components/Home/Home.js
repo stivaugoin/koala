@@ -78,7 +78,7 @@ class Home extends Component<Props, State> {
         {isLoading ? (
           <h1>Loading...</h1>
         ) : (
-          <div className="jumbotron py-5">
+          <div className="jumbotron mt-5 py-5">
             <h1 className="display-6 mb-4">Visualize your genealogy tree</h1>
             <div>
               <input type="file" accept=".ged" onChange={this.handleChange} />

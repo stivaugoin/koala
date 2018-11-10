@@ -17,10 +17,7 @@ class Main extends React.PureComponent<Props> {
 
     return (
       <main
-        className={classnames(
-          "col-md-9 ml-sm-auto col-lg-10 pt-3 px-4",
-          className
-        )}
+        className={classnames("col-sm-12 pt-3 px-4", className)}
         role="main"
       >
         {children}

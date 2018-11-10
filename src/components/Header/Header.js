@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment, PureComponent } from "react";
 import * as Sentry from "@sentry/browser";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { X } from "react-feather";
 
 import type { RouterHistory } from "react-router";
@@ -74,34 +74,90 @@ class Header extends PureComponent<Props, State> {
     const { filename, isLoading } = this.state;
 
     return (
-      <nav className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-        <Link className="navbar-brand col-sm-3 col-md-2 mr-0" to="/">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <Link className="navbar-brand" to="/">
           Koala
         </Link>
 
         {filename && (
           <Fragment>
-            <span className="navbar-text text-light">{filename}</span>
-
-            <ul className="navbar-nav px-3">
-              <li className="nav-item text-nowrap">
-                <button
-                  className="btn btn-outline-light btn-sm my-2 my-sm-0"
-                  disabled={isLoading}
-                  onClick={this.handleResetFile}
-                  type="button"
-                >
-                  {isLoading ? (
-                    "Loading..."
-                  ) : (
-                    <Fragment>
-                      <X className="feather inline" />
-                      Close
-                    </Fragment>
-                  )}
-                </button>
-              </li>
-            </ul>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-toggle="collapse"
+              data-target="#navbarText"
+              aria-controls="navbarText"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon" />
+            </button>
+            <div
+              className="collapse navbar-collapse d-flex justify-content-between"
+              id="navbarText"
+            >
+              <ul className="navbar-nav">
+                <li className="nav-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="nav-link"
+                    to="/overview"
+                  >
+                    Overview
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="nav-link"
+                    to="/people"
+                  >
+                    People
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink
+                    activeClassName="active"
+                    className="nav-link"
+                    to="/places"
+                  >
+                    Places
+                  </NavLink>
+                </li>
+              </ul>
+              {isLoading ? (
+                <span className="navbar-text">Loading...</span>
+              ) : (
+                <ul className="navbar-nav">
+                  <li className="nav-item dropdown">
+                    <div
+                      className="nav-link dropdown-toggle"
+                      id="navbarDropdownMenuLink"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      style={{ cursor: "pointer" }}
+                    >
+                      {filename}
+                    </div>
+                    <div
+                      className="dropdown-menu"
+                      aria-labelledby="navbarDropdownMenuLink"
+                    >
+                      <button
+                        className="dropdown-item"
+                        onClick={this.handleResetFile}
+                        type="button"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <X className="feather inline" />
+                        Close
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              )}
+            </div>
           </Fragment>
         )}
       </nav>

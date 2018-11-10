@@ -6,6 +6,8 @@ import App from "./components/App";
 import ErrorBoundary from "./components/ErrorBoundary";
 import registerServiceWorker from "./registerServiceWorker";
 
+import "bootstrap/dist/js/bootstrap.bundle.min";
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "mapbox-gl/dist/mapbox-gl.css";
 import "bootstrap/dist/css/bootstrap.css";
