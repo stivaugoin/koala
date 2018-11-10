@@ -35,7 +35,6 @@ const setLatLng = places =>
         geocodingClient
           .forwardGeocode({
             query: name,
-            language: ["fr"],
             limit: 1
           })
           .send()
@@ -44,15 +43,22 @@ const setLatLng = places =>
     // Fetch Mapbox to retrieve coordinates
     await Promise.all(promise).then(result => {
       result.forEach(place => {
-        const { coordinates } = place.body.features[0].geometry;
-        const { query } = place.request.params;
+        if (
+          place &&
+          place.body &&
+          place.body.features &&
+          place.body.features.length > 0
+        ) {
+          const { coordinates } = place.body.features[0].geometry;
+          const { query } = place.request.params;
 
-        // Add coordinates to place
-        const index = allPlaces.findIndex(({ name }) => name === query);
-        allPlaces[index].coordinates = coordinates;
+          // Add coordinates to place
+          const index = allPlaces.findIndex(({ name }) => name === query);
+          allPlaces[index].coordinates = coordinates;
 
-        // Prepare coordinates to save into local storage
-        latLng[place.request.params.query] = coordinates;
+          // Prepare coordinates to save into local storage
+          latLng[place.request.params.query] = coordinates;
+        }
       });
     });
 
