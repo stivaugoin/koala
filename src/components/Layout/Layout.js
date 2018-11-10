@@ -8,7 +8,8 @@ import Overview from "../Overview";
 import People from "../People";
 import Place from "../Place";
 import Places from "../Places";
-import Sidebar from "../Sidebar";
+import Map from "../Map";
+import Analytics from "../Analytics";
 
 type Props = {
   ...WithFilename
@@ -27,11 +28,12 @@ class Layout extends Component<Props> {
     }
 
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <Sidebar />
+      <div className="container">
+        <div className="row" style={{ marginTop: "56px", paddingTop: "1em" }}>
           <Switch>
             <Route exact component={Overview} path="/overview" />
+            <Route exact component={Map} path="/map" />
+            <Route exact component={Analytics} path="/analytics" />
             <Route exact component={People} path="/people" />
             <Route exact component={Place} path="/places/:id" />
             <Route exact component={Places} path="/places" />

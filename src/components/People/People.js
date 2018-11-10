@@ -13,7 +13,7 @@ import withPagination, {
 } from "../../utils/hoc/withPagination";
 import withData from "../../utils/hoc/withData";
 
-import { List, TD, TH } from "./styles";
+import { List, TD, TH, TR } from "./styles";
 
 type Event = {|
   date: Date,
@@ -93,7 +93,7 @@ class People extends PureComponent<Props> {
                       const death = getDeath(person.deaths);
 
                       return (
-                        <tr key={person.id}>
+                        <TR key={person.id}>
                           <TD>
                             <User
                               className={classnames({
@@ -140,7 +140,7 @@ class People extends PureComponent<Props> {
                               />
                             </Tooltip>
                           </TD>
-                        </tr>
+                        </TR>
                       );
                     })}
                 </tbody>
