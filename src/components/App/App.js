@@ -13,7 +13,11 @@ class App extends PureComponent {
           <Route path="/" component={Header} />
           <Switch>
             <Route path="/overview" exact component={Layout} />
-            <Route path="/map" exact component={Layout} />
+            <Route
+              path="/map"
+              exact
+              render={props => <Layout fluid {...props} />}
+            />
             <Route path="/analytics" exact component={Layout} />
             <Route path="/people" exact component={Layout} />
             <Route path="/places" component={Layout} />

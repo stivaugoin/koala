@@ -74,7 +74,7 @@ class Header extends PureComponent<Props, State> {
     const { filename, isLoading } = this.state;
 
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top border-bottom">
         <Link className="navbar-brand" to="/">
           Koala
         </Link>
