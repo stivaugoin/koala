@@ -33,6 +33,14 @@ type Props = {|
       names: Array<{
         fname: string,
         lname: string
+      }>,
+      weddings: Array<{
+        ...Event,
+        spouse: {
+          id: string,
+          fname: string,
+          lname: string
+        }
       }>
     }>
   },
@@ -48,6 +56,11 @@ const getBirth = births => ({
 const getDeath = deaths => ({
   date: deaths && deaths[0] && deaths[0].date,
   place: deaths && deaths[0] && deaths[0].place && deaths[0].place.name
+});
+
+const getWedding = weddings => ({
+  date: weddings && weddings[0] && weddings[0].date,
+  place: weddings && weddings[0] && weddings[0].place && weddings[0].place.name
 });
 
 class People extends PureComponent<Props> {
@@ -78,6 +91,9 @@ class People extends PureComponent<Props> {
                       Birth
                     </TH>
                     <TH className="text-center" scope="col">
+                      Wedding
+                    </TH>
+                    <TH className="text-center" scope="col">
                       Death
                     </TH>
                   </tr>
@@ -91,6 +107,7 @@ class People extends PureComponent<Props> {
                     .map(person => {
                       const birth = getBirth(person.births);
                       const death = getDeath(person.deaths);
+                      const wedding = getWedding(person.weddings);
 
                       return (
                         <TR key={person.id}>
@@ -118,6 +135,24 @@ class People extends PureComponent<Props> {
                                 className={classnames({
                                   "text-success": birth.place,
                                   "text-danger": !birth.place
+                                })}
+                              />
+                            </Tooltip>
+                          </TD>
+                          <TD className="text-center">
+                            <Tooltip value={wedding.date}>
+                              <Calendar
+                                className={classnames({
+                                  "text-success": wedding.date,
+                                  "text-danger": !wedding.date
+                                })}
+                              />
+                            </Tooltip>
+                            <Tooltip value={wedding.place}>
+                              <MapPin
+                                className={classnames({
+                                  "text-success": wedding.place,
+                                  "text-danger": !wedding.place
                                 })}
                               />
                             </Tooltip>
