@@ -42,6 +42,7 @@ class Header extends PureComponent<Props, State> {
 
     try {
       await Promise.all([
+        removeItem("countries"),
         removeItem("filename"),
         removeItem("individuals"),
         removeItem("places")

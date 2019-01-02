@@ -15,12 +15,14 @@ const setLatLng = places =>
 
     // Set existing coordinates to places
     const allPlaces = places.map(place => {
-      const coordinates = latLng[place.name];
+      const { coordinates, country, region } = latLng[place.name] || {};
 
-      if (coordinates) {
+      if (coordinates && country && region) {
         return {
           ...place,
-          coordinates
+          coordinates,
+          country,
+          region
         };
       }
 
@@ -49,15 +51,30 @@ const setLatLng = places =>
           place.body.features &&
           place.body.features.length > 0
         ) {
-          const { coordinates } = place.body.features[0].geometry;
+          const { context = [], geometry } = place.body.features[0];
+          const { coordinates } = geometry;
           const { query } = place.request.params;
+
+          const { text: country = "" } =
+            context.find(({ id }) => id.includes("country")) || {};
+
+          const { text: region = "" } =
+            context.find(({ id }) => id.includes("region")) || {};
 
           // Add coordinates to place
           const index = allPlaces.findIndex(({ name }) => name === query);
           allPlaces[index].coordinates = coordinates;
 
+          if (country) {
+            allPlaces[index].country = country;
+          }
+
+          if (region) {
+            allPlaces[index].region = region;
+          }
+
           // Prepare coordinates to save into local storage
-          latLng[place.request.params.query] = coordinates;
+          latLng[query] = { coordinates, country, region };
         }
       });
     });

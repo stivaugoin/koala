@@ -48,8 +48,32 @@ class Home extends Component<Props, State> {
           // Add coordinates to places
           const newPlaces = await setLatLng(parsed.places);
 
+          const countries = newPlaces.reduce(
+            (acc, { coordinates, country, name }) => {
+              if (country) {
+                const countryInfo = { coordinates, name };
+
+                if (!acc[country]) {
+                  return {
+                    ...acc,
+                    [country]: [countryInfo]
+                  };
+                }
+
+                return {
+                  ...acc,
+                  [country]: [...acc[country], countryInfo]
+                };
+              }
+
+              return acc;
+            },
+            {}
+          );
+
           // Save data into local storage
           await Promise.all([
+            setItem("countries", JSON.stringify(countries)),
             setItem("filename", file.name),
             setItem("individuals", JSON.stringify(parsed.individuals)),
             setItem("places", JSON.stringify(newPlaces))
