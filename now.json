@@ -1,5 +1,6 @@
 {
-  "name": "koala",
   "alias": ["koala.stiv.io"],
-  "public": true
+  "name": "koala",
+  "public": true,
+  "version": 2
 }
